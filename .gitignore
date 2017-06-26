@@ -1,0 +1,17 @@
+*.db
+*.opendb
+*.suo
+*.sln
+*.vcxproj*
+*.ipch
+*.exe
+*.ilk
+*.pdb
+*.obj
+*.log
+*.tlog
+*.lastbuildstate
+*.idb
+*.pyc
+*.bak
+*.mwb
