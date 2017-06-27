@@ -38,7 +38,7 @@ class DB:
     def createTables(self):
         db = DB.db_connect
         db.query('''
-            CREATE TABLE IF NOT EXISTS `mydb`.`Viewers` (
+            CREATE TABLE IF NOT EXISTS `Viewers` (
             `@Viewers` INT NOT NULL AUTO_INCREMENT,
             `NickName` TEXT NOT NULL,
             `Points` INT NULL,
