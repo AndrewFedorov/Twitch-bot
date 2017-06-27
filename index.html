@@ -1,0 +1,20 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Главная</title>
+</head>
+<body>
+    <form action="/cgi-bin/index.py">
+        <p>Вопрос<Br>
+        <textarea name="question" cols="40" rows="3"></textarea></p>
+        <script src="index.js"></script>
+        <div id="add">
+            <button type="button" onclick="addInput()">Добавить ответ</button><Br><Br>
+        </div>
+        <button name="create" value="create" type="submit">Создать</button><Br><Br>
+        <button name="close" value="close" type="submit">Закрыть</button>
+        <button name="finish" value="finish" type="submit">Закончить</button><Br><Br>
+        <input type="text" name="winword">
+</body>
+</html>

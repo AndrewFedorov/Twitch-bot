@@ -1,14 +1,13 @@
 import config
-import bot
+import help_func
 import socket
 import re
-import time
 import threading
 from time import sleep
-
+from log import Log
 
 def main():
-
+    help_func.DB().createTables()
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
         s.connect((config.HOST, config.PORT))
         s.sendall("PASS {}\r\n".format(config.PASS).encode("utf-8"))
@@ -16,20 +15,21 @@ def main():
         s.sendall("JOIN #{}\r\n".format(config.CHAN).encode("utf-8"))
 
         chat_message = re.compile(r"^:\w+!\w+@\w+\.tmi\.twitch\.tv PRIVMSG #\w+ :")
-        #bot.mess(s, "start bot")
-
-        threading.Thread(target=bot.fillOpList).start()
-
+        threading.Thread(target=help_func.fillListOfViewers).start()
+        Log().addText('Bot launched')
         while True:
-            response = s.recv(1024).decode("utf-8")
-            if response == "PING :tmi.twitch.tv\r\n":
-                s.sendall("POND :tmi.twitch.tv\r\n".encode("utf-8"))
-            else:
-                username = re.search(r"\w+", response).group(0)
-                message = chat_message.sub("", response)
-                print(response)
-            
-            sleep(3)
-
-if __name__ == "__main__":
-    main()
+            try:
+                response = s.recv(1024).decode("utf-8")
+                if response == "PING :tmi.twitch.tv\r\n":
+                    s.sendall("POND :tmi.twitch.tv\r\n".encode("utf-8"))
+                else:
+                    nickname = re.search(r"\w+", response).group(0)
+                    message = chat_message.sub("", response)
+                    Log().addText(response)
+                    if message.find('!bet') != -1:
+                        help_func.Bet.make(nickname, message)
+                    if message.find('!points') != -1:
+                        help_func.sendToTwitch(s, 'Количество очков {0}: {1}'.format(nickname, help_func.DB().getPoints(nickname)))
+            except Exception as e:
+                Log().addError(str(e))
+            sleep(1)
